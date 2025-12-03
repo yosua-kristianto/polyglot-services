@@ -367,3 +367,4 @@ appsettings.*.json
 
 !appsettings.example.json
 .idea
+.vscode
