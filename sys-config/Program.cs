@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SystemConfigurator.Config;
+using SystemConfigurator.Config.Database;
+using SystemConfigurator.Config.Database.Seeder.UMA;
 
 namespace SystemConfigurator;
 
@@ -64,7 +66,9 @@ class Program
 
                 services.AddDbContext<SystemDbUMAContext>(options =>
                 {
-                    options.UseNpgsql(config.GetConnectionString("UMAConnection"));
+                    options.UseNpgsql(
+                        config.GetConnectionString("UMAConnection")
+                    );
                 });
             })
             .Build();
@@ -74,8 +78,80 @@ class Program
         return host;
     }
 
+    /// <summary>
+    /// This function handle Database Migration. 
+    /// </summary>
+    /// <param name="host"></param>
+    static void DatabaseMigrationRunner(IHost host)
+    {
+        using (IServiceScope scope = host.Services.CreateScope())
+        {
+            // Migrate UMA Database.
+            var db = scope.ServiceProvider.GetRequiredService<SystemDbUMAContext>();
+            db.Database.Migrate();
+        }
+    }
+
+    /// <summary>
+    /// This function handle Database Seeder.
+    /// 
+    /// If the passed env is "prod", then it only run the "Mandatory Seeder".
+    /// </summary>
+    /// <param name="host"></param>
+    /// <param name="env"></param>
+    static void DatabaseSeederController(IHost host, string env)
+    {
+        using (IServiceScope scope = host.Services.CreateScope())
+        {
+            // Seed Mandatory
+            var db = scope.ServiceProvider.GetRequiredService<SystemDbUMAContext>();
+            new MandatorySeeder(db).Seed().GetAwaiter();
+
+            if(env != "prod")
+            {
+                // Seed Users for each Role except Sysadmin
+            }
+            
+        }
+    }
+
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        // Arguments collections
+        // Determine env's arguments. Must be added on start.
+        string? envArg = args.FirstOrDefault(arg => arg.StartsWith("--env", StringComparison.OrdinalIgnoreCase));
+
+        if(envArg == null)
+        {
+            ConsoleHelper.WriteLineWarning("No --env argument found on run. Treating this running session as \"local\".");
+        }
+
+        string environment = envArg?.Split('=')[1] ?? "local";
+
+        IHost envHost = EnvironmentGatherer(environment);
+
+        PrintBanner();
+
+        Console.WriteLine($"\nStarted at: {DateTime.Now:yyyy-MM-dd HH:mm:ss}\n");
+        Console.WriteLine($"Environment: {environment}");
+
+        // Determine whether migration is runned or not.
+        string? migrationArg = args.FirstOrDefault(arg => arg.StartsWith("--migrate", StringComparison.OrdinalIgnoreCase));
+
+        if (migrationArg != null)
+        {
+            Console.WriteLine("Migration argument found. Running migration....");
+            DatabaseMigrationRunner(envHost);
+        }
+
+        // Seeder Control
+        string? seederArg = args.FirstOrDefault(arg => arg.StartsWith("--seed", StringComparison.OrdinalIgnoreCase));
+
+        if (seederArg != null)
+        {
+            Console.WriteLine("Seeder argument found. Running database seeder....");
+
+            DatabaseSeederController(envHost, envArg);
+        }
     }
 }
