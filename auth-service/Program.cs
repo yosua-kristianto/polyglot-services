@@ -1,4 +1,7 @@
 using System.Reflection;
+using AuthService.Config;
+using AuthService.Config.Database;
+using Microsoft.EntityFrameworkCore;
 using Model.Object;
 namespace AuthService;
 
@@ -25,11 +28,61 @@ public class Program
         }
     }
 
+    /// <summary>
+    /// This function is boilerplate of this project. Used for determine which environment 
+    /// variable used during run time.
+    /// </summary>
+    static WebApplicationBuilder EnvironmentGatherer(string environment, WebApplicationBuilder builder)
+    {
+        // Valid env
+        string[] validEnvArgs = new[] { "local", "dev", "prod" };
+        
+        if (!validEnvArgs.Contains(environment))
+        {
+            string exceptionString = $"The only valid env args are either \"local\", \"dev\", or \"prod\" found \"{environment}\"";
+            ConsoleHelper.WriteLineError(exceptionString);
+            throw new Exception(exceptionString);
+        }
+
+        // Builder
+        builder.Configuration
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false)
+            .AddJsonFile($"appsettings.{environment}.json", optional: true)
+            .AddEnvironmentVariables();
+
+        return builder;
+    }
+
+    static void PersistanceConnection(WebApplicationBuilder builder)
+    {
+        // Entity Framework Core - Database
+        builder.Services.AddDbContext<SystemDbUMAContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetConnectionString("UMAConnection"))
+        );
+
+        // Stack Exchange Redis
+    }
+
     public static void Main(string[] args)
     {
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+        // Arguments collections
+        // Determine env's arguments. Must be added on start.
+        string? envArg = args.FirstOrDefault(arg => arg.StartsWith("--env", StringComparison.OrdinalIgnoreCase));
+
+        if(envArg == null)
+        {
+            ConsoleHelper.WriteLineWarning("No --env argument found on run. Treating this running session as \"local\".");
+        }
+
+        string environment = envArg?.Split('=')[1] ?? "local";
+
+        WebApplicationBuilder envHost = EnvironmentGatherer(environment, builder);
+
         PrintBanner();
 
-        var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
