@@ -1,52 +1,50 @@
+using System.Reflection;
 using Model.Object;
+namespace AuthService;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+public class Program
 {
-    app.MapOpenApi();
-}
-
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-
-    BaseResponseDTO<WeatherForecast[]> response = new BaseResponseDTO<WeatherForecast[]>
+    /// <summary>
+    /// This function is boilerplate of this project. Used for printing micro service banner
+    /// to easily identify everything running service.
+    /// </summary>
+    static void PrintBanner()
     {
-        Status = true,
-        Message = "Weather forecast retrieved successfully.",
-        Code = "200",
-        Data = forecast
-    };
+        // Read the file as embedded resources
+        var assembly = Assembly.GetExecutingAssembly();
+        string resourceName = "AuthService.banner.txt";
+        using Stream stream = assembly.GetManifestResourceStream(resourceName);
+        if(stream == null)
+        {
+            Console.WriteLine(":: McAstr UMA Services ::");
+        }
+        else
+        {
+            using StreamReader reader = new StreamReader(stream);
+            Console.WriteLine(reader.ReadToEnd());
+        }
+    }
 
-    return response;
-})
-.WithName("GetWeatherForecast");
+    public static void Main(string[] args)
+    {
+        PrintBanner();
 
-app.Run();
+        var builder = WebApplication.CreateBuilder(args);
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        // Add services to the container.
+        // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+        builder.Services.AddOpenApi();
+
+        var app = builder.Build();
+
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.MapOpenApi();
+        }
+
+        app.UseHttpsRedirection();
+
+        app.Run();
+    }
 }
