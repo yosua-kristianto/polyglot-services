@@ -1,8 +1,11 @@
 using System.Reflection;
 using AuthService.Config;
 using AuthService.Config.Database;
+using AuthService.Config.Memcache;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Model.Object;
+using StackExchange.Redis;
 namespace AuthService;
 
 public class Program
@@ -62,6 +65,20 @@ public class Program
         );
 
         // Stack Exchange Redis
+        builder.Services.Configure<RedisOptions>(
+            builder.Configuration.GetSection("Redis")
+        );
+        builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+        {
+            var redisOptions = sp.GetRequiredService<IOptions<RedisOptions>>().Value;
+            var configurationOptions = new ConfigurationOptions
+            {
+                EndPoints = { $"{redisOptions.Host}:{redisOptions.Port}" },
+                Password = redisOptions.Password,
+                AbortOnConnectFail = false
+            };
+            return ConnectionMultiplexer.Connect(configurationOptions);
+        });
     }
 
     public static void Main(string[] args)
@@ -82,6 +99,8 @@ public class Program
         WebApplicationBuilder envHost = EnvironmentGatherer(environment, builder);
 
         PrintBanner();
+
+        PersistanceConnection(envHost);
 
 
         // Add services to the container.

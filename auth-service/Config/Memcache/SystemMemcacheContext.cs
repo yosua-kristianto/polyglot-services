@@ -7,6 +7,13 @@ public interface IRedisConnection
     IDatabase Database { get; }
 }
 
+public class RedisOptions
+{
+    public string Host {get;set;}
+    public int Port {get;set;}
+    public string Password {get;set;}
+}
+
 public class SystemCacheUMAContext : IRedisConnection
 {
     private readonly Lazy<ConnectionMultiplexer> _connection;
