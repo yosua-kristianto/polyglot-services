@@ -1,11 +1,15 @@
 using System.Reflection;
+using System.Text.Json;
+using auth_service.Api.Handler;
+using auth_service.Repository.Memcache.Otp;
+using auth_service.Repository.Memcache.Token;
+using auth_service.Repository.UMA;
+using AuthService.Api.Handler;
 using AuthService.Config;
 using AuthService.Config.Database;
 using AuthService.Config.Memcache;
+using AuthService.Repository.Memcache.Token;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Model.Object;
-using StackExchange.Redis;
 namespace AuthService;
 
 public class Program
@@ -68,17 +72,16 @@ public class Program
         builder.Services.Configure<RedisOptions>(
             builder.Configuration.GetSection("Redis")
         );
-        builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
-        {
-            var redisOptions = sp.GetRequiredService<IOptions<RedisOptions>>().Value;
-            var configurationOptions = new ConfigurationOptions
-            {
-                EndPoints = { $"{redisOptions.Host}:{redisOptions.Port}" },
-                Password = redisOptions.Password,
-                AbortOnConnectFail = false
-            };
-            return ConnectionMultiplexer.Connect(configurationOptions);
-        });
+        builder.Services.AddSingleton<IRedisConnection, SystemCacheUMAContext>();
+    }
+
+    public static void RegisterDI(WebApplicationBuilder builder)
+    {
+        // Add Dependency Injection registrations here
+        builder.Services.AddScoped<IAuthControllerHandler, AuthControllerHandler>();
+        builder.Services.AddScoped<IUMARepository, UMARepository>();
+        builder.Services.AddScoped<IOtpRepository, OtpRepository>();
+        builder.Services.AddScoped<ITokenCacheRepository, TokenCacheRepository>();
     }
 
     public static void Main(string[] args)
@@ -102,8 +105,20 @@ public class Program
 
         PersistanceConnection(envHost);
 
+        RegisterDI(builder);
 
         // Add services to the container.
+        builder.Services
+            .AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy =
+                    JsonNamingPolicy.SnakeCaseLower;
+
+                options.JsonSerializerOptions.DictionaryKeyPolicy =
+                    JsonNamingPolicy.SnakeCaseLower;
+            });
+
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
 
@@ -116,6 +131,7 @@ public class Program
         }
 
         app.UseHttpsRedirection();
+        app.MapControllers();
 
         app.Run();
     }
