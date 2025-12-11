@@ -70,6 +70,13 @@ class Program
                         config.GetConnectionString("UMAConnection")
                     );
                 });
+
+                services.AddDbContext<SystemDbNMAContext>(options =>
+                {
+                    options.UseNpgsql(
+                        config.GetConnectionString("NMAConnection")
+                    );
+                });
             })
             .Build();
 
@@ -89,6 +96,12 @@ class Program
             // Migrate UMA Database.
             var db = scope.ServiceProvider.GetRequiredService<SystemDbUMAContext>();
             db.Database.Migrate();
+            Console.WriteLine("Database UMA migration completed.");
+
+            // Migrate NMA Database.
+            var dbNma = scope.ServiceProvider.GetRequiredService<SystemDbNMAContext>();
+            dbNma.Database.Migrate();
+            Console.WriteLine("Database NMA migration completed.");
         }
     }
 

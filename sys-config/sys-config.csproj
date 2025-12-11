@@ -40,7 +40,10 @@
     </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Config\Database\Migrations\NMA\" />
     <Folder Include="Config\Database\Migrations\UMA\" />
+    <Folder Include="Model\NMA\" />
+    <Folder Include="Model\NMA\LOV\" />
   </ItemGroup>
 
 </Project>
