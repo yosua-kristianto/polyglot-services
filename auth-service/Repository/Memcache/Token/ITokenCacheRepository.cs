@@ -17,7 +17,7 @@ public interface ITokenCacheRepository
     /// <exception cref=""ArgumentNullException></exception>
     /// <param name="tokenId"></param>
     /// <returns></returns>
-    Task<TokenCache> GetTokenByIdAsync(Guid tokenId);
+    Task<TokenCache?> GetTokenByIdAsync(Guid tokenId);
     Task<TokenCache?> GetTokenByRefreshIdAsync(Guid refreshId);
     Task<IEnumerable<TokenCache>> GetTokensByUserAsync(Guid userId);
     Task DeleteTokenAsync(Guid tokenId);
