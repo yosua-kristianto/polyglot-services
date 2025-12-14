@@ -1,0 +1,5 @@
+integration:
+  telegram:
+    uri: https://api.telegram.org/bot
+    chatid: <YOUR_CHAT_ID>
+    botid: <bot_id>
