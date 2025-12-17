@@ -1,5 +1,9 @@
 package com.devcraftlabs.integration.services.telegram;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.reactive.function.client.WebClient;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TelegramService implements ITelegramService {
 
@@ -33,7 +37,7 @@ public class TelegramService implements ITelegramService {
         // 2️⃣ Prepare request payload
         Map<String, Object> payload = new HashMap<>();
         payload.put("chat_id", this.chatId);
-        payload.put("text", this.trimmedMessage);
+        payload.put("text", trimmedMessage);
 
         // 3️⃣ Send message to Telegram API
         webClient.post()
