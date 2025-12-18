@@ -1,5 +1,6 @@
 using System;
 using auth_service.Common.Exceptions;
+using auth_service.Messaging.Producer;
 using auth_service.Repository.Memcache.Otp;
 using auth_service.Repository.UMA;
 using AuthService.Api.Handler;
@@ -7,6 +8,7 @@ using AuthService.Common.Exceptions;
 using AuthService.model.Object.Response;
 using AuthService.Model.Entity;
 using AuthService.Model.Memcache;
+using AuthService.Model.Object.Messaging.Producer;
 using AuthService.Repository.Memcache.Token;
 
 namespace auth_service.Api.Handler;
@@ -17,11 +19,14 @@ public class AuthControllerHandler : IAuthControllerHandler
     private readonly IOtpRepository _otpRepository;
     private readonly ITokenCacheRepository _tokenCacheRepository;
 
-    public AuthControllerHandler(IUMARepository umaRepository, IOtpRepository otpRepository, ITokenCacheRepository tokenCacheRepository)
+    private readonly AuthenticationSMTPMessageProducer _authOtpProducer;
+
+    public AuthControllerHandler(IUMARepository umaRepository, IOtpRepository otpRepository, ITokenCacheRepository tokenCacheRepository, AuthenticationSMTPMessageProducer authOtp)
     {
         this._umaRepository = umaRepository;
         this._otpRepository = otpRepository;
         this._tokenCacheRepository = tokenCacheRepository;
+        this._authOtpProducer = authOtp;
     }
 
     private string GenerateOTPCode(int length = 8)
@@ -51,14 +56,26 @@ public class AuthControllerHandler : IAuthControllerHandler
                 break;
         }
 
-        this._otpRepository.CreateOtp(new OtpCache
+        OtpCache otp = new OtpCache
         {
             UserId = existingUser.Id,
             Otp = GenerateOTPCode(),
             ExpiredAt = DateTimeOffset.UtcNow.AddMinutes(2).ToUnixTimeMilliseconds()
-        });
+        };
+
+        this._otpRepository.CreateOtp(otp);
 
         // @TODO Send to NMA
+
+        AuthenticationOTPMessageProducerDTO producerDTO = new()
+        {
+            UserId = existingUser.Id,
+            Email = existingUser.Email,
+            Otp = otp.Otp,
+            RecipientName = existingUser.Name
+        };
+
+        this._authOtpProducer.Send(producerDTO).GetAwaiter();
     }
 
     public LoginResponseDTO Login(string email, string otp, string deviceId)
@@ -130,7 +147,15 @@ public class AuthControllerHandler : IAuthControllerHandler
 
         this._otpRepository.CreateOtp(otp);
 
-        // @TODO: Send email(NMA Service)
+        AuthenticationOTPMessageProducerDTO producerDTO = new()
+        {
+            UserId = user.Id,
+            Email = user.Email,
+            Otp = otp.Otp,
+            RecipientName = user.Name
+        };
+
+        this._authOtpProducer.Send(producerDTO).GetAwaiter();
     }
 
     public LoginResponseDTO VerifyEmailRegistration(string email, string otp, string deviceId)
