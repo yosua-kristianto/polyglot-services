@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using sys_config.Config.Database.Seeder.NMA;
 using SystemConfigurator.Config;
 using SystemConfigurator.Config.Database;
 using SystemConfigurator.Config.Database.Seeder.UMA;
@@ -118,7 +119,9 @@ class Program
         {
             // Seed Mandatory
             var db = scope.ServiceProvider.GetRequiredService<SystemDbUMAContext>();
+            var dbNma = scope.ServiceProvider.GetRequiredService<SystemDbNMAContext>();
             new MandatorySeeder(db).Seed().GetAwaiter();
+            new PersonalNotificationSeeder(dbNma).Seed().GetAwaiter();
 
             if(env != "prod")
             {
