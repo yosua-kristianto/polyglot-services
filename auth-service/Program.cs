@@ -1,6 +1,8 @@
 using System.Reflection;
 using System.Text.Json;
 using auth_service.Api.Handler;
+using auth_service.Config.Kafka;
+using auth_service.Messaging.Producer;
 using auth_service.Repository.Memcache.Otp;
 using auth_service.Repository.Memcache.Token;
 using auth_service.Repository.UMA;
@@ -9,6 +11,7 @@ using AuthService.Config;
 using AuthService.Config.Database;
 using AuthService.Config.Memcache;
 using AuthService.Repository.Memcache.Token;
+using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 namespace AuthService;
 
@@ -73,6 +76,8 @@ public class Program
             builder.Configuration.GetSection("Redis")
         );
         builder.Services.AddSingleton<IRedisConnection, SystemCacheUMAContext>();
+
+        builder.Services.AddSingleton<KafkaContext>();
     }
 
     public static void RegisterDI(WebApplicationBuilder builder)
@@ -82,6 +87,8 @@ public class Program
         builder.Services.AddScoped<IUMARepository, UMARepository>();
         builder.Services.AddScoped<IOtpRepository, OtpRepository>();
         builder.Services.AddScoped<ITokenCacheRepository, TokenCacheRepository>();
+
+        builder.Services.AddScoped<AuthenticationSMTPMessageProducer>();
     }
 
     public static void Main(string[] args)
