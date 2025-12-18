@@ -1,10 +1,12 @@
 package com.devcraftlabs.integration.services.telegram;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class TelegramService implements ITelegramService {
 
     private static final int MAX_MESSAGE_LENGTH = 2000;

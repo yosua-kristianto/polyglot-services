@@ -4,15 +4,25 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import com.devcraftlabs.integration.model.object.SmtpMessageRequestDTO;
+import com.devcraftlabs.integration.services.smtp.SMTPService;
+import com.devcraftlabs.integration.services.telegram.TelegramService;
+
+import jakarta.mail.MessagingException;
 
 @Component
 public class MailerConsumer {
+
+    private SMTPService _smtpService;
+
+    public MailerConsumer(SMTPService smtpService){
+        this._smtpService = smtpService;
+    }
 
     @KafkaListener(
         topics = "integration-service-01-smtp",
         groupId = "integration-service"
     )
-    public void consume(SmtpMessageRequestDTO message){
+    public void consume(SmtpMessageRequestDTO message) throws MessagingException{
         if (message == null) {
             return;
         }
@@ -27,6 +37,12 @@ public class MailerConsumer {
         System.out.println("Subject: " + subject);
         System.out.println("HTML Body: " + htmlBody);
 
-
+        try{
+            this._smtpService.sendHtmlEmail(recipient, subject, htmlBody, null);
+        }catch(MessagingException e){
+            System.out.println("NGEHE ", e.getMessage());
+            e.printStackTrace();
+        }
+        
     }
 }
