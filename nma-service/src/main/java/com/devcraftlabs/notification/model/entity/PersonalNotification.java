@@ -11,9 +11,14 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "personal_notifications")
+@Table(name = "nma_tbl_personal_notifications")
 @Data
 public class PersonalNotification {
+    public static String PERSONAL_NOTIFICATION_TYPE_DEBUG = "DEBUG";
+    public static String PERSONAL_NOTIFICATION_TYPE_MAIL = "MAIL";
+    public static String PERSONAL_NOTIFICATION_TYPE_WA = "WHATSAPP";
+    public static String PERSONAL_NOTIFICATION_TYPE_SMS = "SMS";
+
     @Id
     @Column(name = "notification_id", nullable = false)
     private UUID id;
@@ -27,8 +32,7 @@ public class PersonalNotification {
     @Column(name = "notification_title", nullable = false, length = 60)
     private String title;
 
-    @Lob
-    @Column(name = "notification_body", nullable = false)
+    @Column(name = "notification_body", nullable = false, columnDefinition = "TEXT")
     private String body;
 
     @Column(name = "created_at", nullable = false)
