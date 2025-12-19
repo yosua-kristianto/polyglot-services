@@ -1,7 +1,7 @@
 using System;
 using Confluent.Kafka;
 
-namespace auth_service.Config.Kafka;
+namespace AuthService.Config.Kafka;
 
 public sealed class KafkaContext : IDisposable
 {

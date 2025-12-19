@@ -1,11 +1,11 @@
 using System.Reflection;
 using System.Text.Json;
-using auth_service.Api.Handler;
-using auth_service.Config.Kafka;
-using auth_service.Messaging.Producer;
-using auth_service.Repository.Memcache.Otp;
-using auth_service.Repository.Memcache.Token;
-using auth_service.Repository.UMA;
+using AuthService.Api.Handler;
+using AuthService.Config.Kafka;
+using AuthService.Messaging.Producer;
+using AuthService.Repository.Memcache.Otp;
+using AuthService.Repository.Memcache.Token;
+using AuthService.Repository.UMA;
 using AuthService.Api.Handler;
 using AuthService.Config;
 using AuthService.Config.Database;
@@ -25,7 +25,7 @@ public class Program
     {
         // Read the file as embedded resources
         var assembly = Assembly.GetExecutingAssembly();
-        string resourceName = "AuthService.banner.txt";
+        string resourceName = "AuthService.AuthService.banner.txt";
         using Stream stream = assembly.GetManifestResourceStream(resourceName);
         if(stream == null)
         {

@@ -1,7 +1,7 @@
 using System;
 using AuthService.Model.Memcache;
 
-namespace auth_service.Repository.Memcache.Otp;
+namespace AuthService.Repository.Memcache.Otp;
 
 public interface IOtpRepository
 {

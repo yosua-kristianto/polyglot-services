@@ -5,7 +5,7 @@ using AuthService.Model.Memcache;
 using AuthService.Repository.Memcache;
 using StackExchange.Redis;
 
-namespace auth_service.Repository.Memcache.Otp;
+namespace AuthService.Repository.Memcache.Otp;
 
 public class OtpRepository(IRedisConnection ctx) : BaseMemcacheRepository(ctx), IOtpRepository
 {

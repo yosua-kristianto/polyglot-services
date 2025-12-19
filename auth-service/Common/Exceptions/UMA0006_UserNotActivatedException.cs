@@ -1,6 +1,6 @@
 using System;
 
-namespace auth_service.Common.Exceptions;
+namespace AuthService.Common.Exceptions;
 
 public class UserNotActivatedException() : Exception(message: ErrorMessage)
 {

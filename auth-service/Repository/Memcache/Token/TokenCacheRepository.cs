@@ -7,7 +7,7 @@ using StackExchange.Redis;
 using System.Text.Json;
 using AuthService.Config.Memcache;
 
-namespace auth_service.Repository.Memcache.Token;
+namespace AuthService.Repository.Memcache.Token;
 
 public class TokenCacheRepository(IRedisConnection ctx) : BaseMemcacheRepository(ctx), ITokenCacheRepository
 {

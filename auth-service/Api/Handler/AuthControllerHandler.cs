@@ -1,17 +1,14 @@
-using System;
-using auth_service.Common.Exceptions;
-using auth_service.Messaging.Producer;
-using auth_service.Repository.Memcache.Otp;
-using auth_service.Repository.UMA;
-using AuthService.Api.Handler;
 using AuthService.Common.Exceptions;
+using AuthService.Messaging.Producer;
+using AuthService.Repository.Memcache.Otp;
+using AuthService.Repository.UMA;
 using AuthService.model.Object.Response;
 using AuthService.Model.Entity;
 using AuthService.Model.Memcache;
 using AuthService.Model.Object.Messaging.Producer;
 using AuthService.Repository.Memcache.Token;
 
-namespace auth_service.Api.Handler;
+namespace AuthService.Api.Handler;
 
 public class AuthControllerHandler : IAuthControllerHandler
 {

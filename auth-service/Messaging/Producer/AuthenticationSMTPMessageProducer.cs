@@ -1,10 +1,10 @@
 using System;
 using System.Text.Json;
-using auth_service.Config.Kafka;
+using AuthService.Config.Kafka;
 using AuthService.Model.Object.Messaging.Producer;
 using Confluent.Kafka;
 
-namespace auth_service.Messaging.Producer;
+namespace AuthService.Messaging.Producer;
 
 public sealed class AuthenticationSMTPMessageProducer
 {
