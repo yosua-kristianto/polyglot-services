@@ -40,7 +40,7 @@ public class MailerConsumer {
         try{
             this._smtpService.sendHtmlEmail(recipient, subject, htmlBody, null);
         }catch(MessagingException e){
-            System.out.println("NGEHE ", e.getMessage());
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
         
