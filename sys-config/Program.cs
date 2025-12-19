@@ -115,19 +115,17 @@ class Program
     /// <param name="env"></param>
     static void DatabaseSeederController(IHost host, string env)
     {
-        using (IServiceScope scope = host.Services.CreateScope())
-        {
-            // Seed Mandatory
-            var db = scope.ServiceProvider.GetRequiredService<SystemDbUMAContext>();
-            var dbNma = scope.ServiceProvider.GetRequiredService<SystemDbNMAContext>();
-            new MandatorySeeder(db).Seed().GetAwaiter();
-            new PersonalNotificationSeeder(dbNma).Seed().GetAwaiter();
+        using IServiceScope scope = host.Services.CreateScope();
 
-            if(env != "prod")
-            {
-                // Seed Users for each Role except Sysadmin
-            }
-            
+        // Seed Mandatory
+        var db = scope.ServiceProvider.GetRequiredService<SystemDbUMAContext>();
+        var dbNma = scope.ServiceProvider.GetRequiredService<SystemDbNMAContext>();
+        new MandatorySeeder(db).Seed().GetAwaiter();
+        new PersonalNotificationSeeder(dbNma).Seed().GetAwaiter();
+
+        if (env != "prod")
+        {
+            // Seed Users for each Role except Sysadmin
         }
     }
 
