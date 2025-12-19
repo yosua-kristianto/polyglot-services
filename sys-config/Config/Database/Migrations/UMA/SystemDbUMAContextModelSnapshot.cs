@@ -8,7 +8,7 @@ using SystemConfigurator.Config.Database;
 
 #nullable disable
 
-namespace sys_config.Config.Database.Migrations.UMA
+namespace SystemConfigurator.Config.Database.Migrations.UMA
 {
     [DbContext(typeof(SystemDbUMAContext))]
     partial class SystemDbUMAContextModelSnapshot : ModelSnapshot

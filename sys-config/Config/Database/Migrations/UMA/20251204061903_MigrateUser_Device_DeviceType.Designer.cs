@@ -9,7 +9,7 @@ using SystemConfigurator.Config.Database;
 
 #nullable disable
 
-namespace sys_config.Config.Database.Migrations.UMA
+namespace SystemConfigurator.Config.Database.Migrations.UMA
 {
     [DbContext(typeof(SystemDbUMAContext))]
     [Migration("20251204061903_MigrateUser_Device_DeviceType")]

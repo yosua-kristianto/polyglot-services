@@ -9,7 +9,7 @@ using SystemConfigurator.Config.Database;
 
 #nullable disable
 
-namespace sys_config.Config.Database.Migrations.NMA
+namespace SystemConfigurator.Config.Database.Migrations.NMA
 {
     [DbContext(typeof(SystemDbNMAContext))]
     [Migration("20251211113542_MigrateNotifications")]

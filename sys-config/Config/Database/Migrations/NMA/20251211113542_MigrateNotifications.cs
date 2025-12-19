@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace sys_config.Config.Database.Migrations.NMA
+namespace SystemConfigurator.Config.Database.Migrations.NMA
 {
     /// <inheritdoc />
     public partial class MigrateNotifications : Migration

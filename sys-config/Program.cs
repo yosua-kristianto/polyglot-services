@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using sys_config.Config.Database.Seeder.NMA;
+using SystemConfigurator.Config.Database.Seeder.NMA;
 using SystemConfigurator.Config;
 using SystemConfigurator.Config.Database;
 using SystemConfigurator.Config.Database.Seeder.UMA;

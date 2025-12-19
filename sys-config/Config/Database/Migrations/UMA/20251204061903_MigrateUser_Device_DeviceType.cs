@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace sys_config.Config.Database.Migrations.UMA
+namespace SystemConfigurator.Config.Database.Migrations.UMA
 {
     /// <inheritdoc />
     public partial class MigrateUser_Device_DeviceType : Migration

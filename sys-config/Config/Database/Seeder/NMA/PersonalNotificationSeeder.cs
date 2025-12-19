@@ -4,7 +4,7 @@ using SysConfig.Model.NMA.LOV;
 using SystemConfigurator.Config.Database;
 using SystemConfigurator.Config.Database.Seeder;
 
-namespace sys_config.Config.Database.Seeder.NMA;
+namespace SystemConfigurator.Config.Database.Seeder.NMA;
 
 public class PersonalNotificationSeeder : MainSeeder
 {
