@@ -6,7 +6,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.HashMap;
 import java.util.Map;
 
-@Service
 public class TelegramService implements ITelegramService {
 
     private static final int MAX_MESSAGE_LENGTH = 2000;
