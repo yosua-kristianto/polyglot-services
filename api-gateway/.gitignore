@@ -1,0 +1,52 @@
+# ===============================
+# Rust / Cargo
+# ===============================
+/target/
+**/*.rs.bk
+
+# Cargo.lock
+# Keep Cargo.lock for binaries (recommended)
+# Ignore it for libraries if you want
+# Cargo.lock
+
+# ===============================
+# Environment variables
+# ===============================
+.env
+.env.*
+!.env.example
+
+# ===============================
+# Logs & runtime files
+# ===============================
+*.log
+logs/
+tmp/
+
+# ===============================
+# OS / Editor junk
+# ===============================
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+!.vscode/extensions.json
+
+# JetBrains
+.idea/
+*.iml
+
+# ===============================
+# Coverage / profiling
+# ===============================
+coverage/
+*.gcda
+*.gcno
+*.gcov
+*.profraw
+
+# ===============================
+# Debug / crash dumps
+# ===============================
+core
