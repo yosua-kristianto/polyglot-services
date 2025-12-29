@@ -1,52 +1,37 @@
-# ===============================
-# Rust / Cargo
-# ===============================
-/target/
-**/*.rs.bk
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-# Cargo.lock
-# Keep Cargo.lock for binaries (recommended)
-# Ignore it for libraries if you want
-# Cargo.lock
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
 
-# ===============================
-# Environment variables
-# ===============================
-.env
-.env.*
-!.env.example
-
-# ===============================
-# Logs & runtime files
-# ===============================
-*.log
-logs/
-tmp/
-
-# ===============================
-# OS / Editor junk
-# ===============================
-.DS_Store
-Thumbs.db
-
-# VS Code
-.vscode/
-!.vscode/extensions.json
-
-# JetBrains
-.idea/
+### IntelliJ IDEA ###
+.idea
+*.iws
 *.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
 
-# ===============================
-# Coverage / profiling
-# ===============================
-coverage/
-*.gcda
-*.gcno
-*.gcov
-*.profraw
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
 
-# ===============================
-# Debug / crash dumps
-# ===============================
-core
+### VS Code ###
+.vscode/
