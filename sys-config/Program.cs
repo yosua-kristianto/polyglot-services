@@ -92,18 +92,17 @@ class Program
     /// <param name="host"></param>
     static void DatabaseMigrationRunner(IHost host)
     {
-        using (IServiceScope scope = host.Services.CreateScope())
-        {
-            // Migrate UMA Database.
-            var db = scope.ServiceProvider.GetRequiredService<SystemDbUMAContext>();
-            db.Database.Migrate();
-            Console.WriteLine("Database UMA migration completed.");
+        Console.WriteLine("Starting database migration...");
+        using IServiceScope scope = host.Services.CreateScope();
+        // Migrate UMA Database.
+        var db = scope.ServiceProvider.GetRequiredService<SystemDbUMAContext>();
+        db.Database.Migrate();
+        Console.WriteLine("Database UMA migration completed.");
 
-            // Migrate NMA Database.
-            var dbNma = scope.ServiceProvider.GetRequiredService<SystemDbNMAContext>();
-            dbNma.Database.Migrate();
-            Console.WriteLine("Database NMA migration completed.");
-        }
+        // Migrate NMA Database.
+        var dbNma = scope.ServiceProvider.GetRequiredService<SystemDbNMAContext>();
+        dbNma.Database.Migrate();
+        Console.WriteLine("Database NMA migration completed.");
     }
 
     /// <summary>
