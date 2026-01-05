@@ -1,6 +1,7 @@
 using AuthService.Api.Handler;
 using AuthService.model.Object.Request;
 using AuthService.model.Object.Response;
+using AuthService.Model.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model.Object;
@@ -77,5 +78,16 @@ public class AuthController : ControllerBase
         };
     }
 
-
+    [HttpPost("me")]
+    public BaseResponseDTO<User> Me([FromHeader(Name = "Authorization")] string accessToken)
+    {
+        var response = _authControllerHandler.Me(accessToken);
+        return new BaseResponseDTO<User>
+        {
+            Data = response,
+            Message = "User fetched successfully",
+            Status = true,
+            Code = "200"
+        };
+    }
 }
