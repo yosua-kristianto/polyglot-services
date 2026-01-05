@@ -1,6 +1,5 @@
 package com.devcraftlabs.gateway.common;
 
-import java.time.Duration;
 import java.util.Map;
 
 import org.springframework.core.ParameterizedTypeReference;
@@ -9,13 +8,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
 
-import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
-import reactor.util.retry.Retry;
-
+@Service
 public class TemplateService<T, S> {
     protected final RestTemplate restTemplate;
 
@@ -26,11 +21,12 @@ public class TemplateService<T, S> {
     /**
      * 1. Core request implementation using WebClient
      */
-    private S request(
+    private <S> S request(
             HttpMethodEnum method,
             String uri,
             T request,
-            Object header
+            Object header,
+            ParameterizedTypeReference<S> responseType
     ) {
 
         HttpHeaders httpHeaders = buildHeaders(header);
@@ -39,7 +35,7 @@ public class TemplateService<T, S> {
 
             HttpEntity<T> httpEntity = new HttpEntity<>(request, httpHeaders);
 
-            return restTemplate.exchange(uri, resolveMethod(method), httpEntity, new ParameterizedTypeReference<S>(){}).getBody();
+            return restTemplate.exchange(uri, resolveMethod(method), httpEntity, responseType).getBody();
 
         } catch (Exception ex) {
             System.out.println(ex);
@@ -56,11 +52,12 @@ public class TemplateService<T, S> {
     /**
      * 2. Overloaded request with Access Token
      */
-    public S request(
+    public <S> S request(
             HttpMethodEnum method,
             String uri,
             T request,
-            String accessToken
+            String accessToken,
+            ParameterizedTypeReference<S> responseType
     ) {
 
         HttpHeaders headers = new HttpHeaders();
@@ -68,23 +65,24 @@ public class TemplateService<T, S> {
         headers.setAccept(MediaType.parseMediaTypes(MediaType.APPLICATION_JSON_VALUE));
         headers.setBearerAuth(accessToken);
 
-        return this.request(method, uri, request, headers);
+        return this.request(method, uri, request, headers, responseType);
     }
 
     /**
      * 3. Overloaded request without custom header
      */
-    public S request(
+    public <S> S request(
             HttpMethodEnum method,
             String uri,
-            T request
+            T request,
+            ParameterizedTypeReference<S> responseType
     ) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(MediaType.parseMediaTypes(MediaType.APPLICATION_JSON_VALUE));
 
-        return this.request(method, uri, request, headers);
+        return this.request(method, uri, request, headers, responseType);
     }
 
     /* =========================
@@ -125,9 +123,5 @@ public class TemplateService<T, S> {
         }
 
         return headers;
-    }
-
-    private boolean isRetryableException(Throwable throwable) {
-        return throwable instanceof WebClientRequestException;
     }
 }

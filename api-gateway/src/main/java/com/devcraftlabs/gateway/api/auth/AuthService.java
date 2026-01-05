@@ -21,7 +21,7 @@ public class AuthService implements IAuthService {
     private RestTemplate restTemplate;
 
     public AuthService(
-        RestTemplate webClirestTemplateent,
+        RestTemplate restTemplate,
         @Value("${gateway.uri.auth-service}") String authUri
     ) {
         this.restTemplate = restTemplate;
@@ -31,7 +31,12 @@ public class AuthService implements IAuthService {
     @Override
     public BaseResponseDTO<LoginResponseDTO> login(LoginRequestDTO request) {
         TemplateService<LoginRequestDTO, BaseResponseDTO<LoginResponseDTO>> restTemplate = new TemplateService<LoginRequestDTO, BaseResponseDTO<LoginResponseDTO>>(this.restTemplate);
-        BaseResponseDTO<LoginResponseDTO> response = restTemplate.request(HttpMethodEnum.POST, this.baseUri + "login", request);
+        BaseResponseDTO<LoginResponseDTO> response = restTemplate.request(
+            HttpMethodEnum.POST, 
+            this.baseUri + "login", 
+            request,
+            new ParameterizedTypeReference<BaseResponseDTO<LoginResponseDTO>>() {}
+        );
 
         return response;
     }
@@ -40,20 +45,35 @@ public class AuthService implements IAuthService {
     public BaseResponseDTO<Object> register(RegisterRequestDTO request) {
         TemplateService<RegisterRequestDTO, BaseResponseDTO<Object>> restTemplate = new TemplateService<RegisterRequestDTO, BaseResponseDTO<Object>>(this.restTemplate);
 
-        return restTemplate.request(HttpMethodEnum.POST, this.baseUri + "register", request);
+        return restTemplate.request(
+            HttpMethodEnum.POST, 
+            this.baseUri + "register", 
+            request, 
+            new ParameterizedTypeReference<BaseResponseDTO<Object>>() {}
+        );
     }
 
     @Override
     public BaseResponseDTO<LoginResponseDTO> verifyEmailRegistration(LoginRequestDTO request) {
         TemplateService<LoginRequestDTO, BaseResponseDTO<LoginResponseDTO>> restTemplate = new TemplateService<LoginRequestDTO, BaseResponseDTO<LoginResponseDTO>>(this.restTemplate);
 
-        return restTemplate.request(HttpMethodEnum.POST, this.baseUri + "verify-email", request);
+        return restTemplate.request(
+            HttpMethodEnum.POST, 
+            this.baseUri + "verify-email", 
+            request,
+            new ParameterizedTypeReference<BaseResponseDTO<LoginResponseDTO>>() {}
+        );
     }
 
     @Override
     public BaseResponseDTO<Object> invokeOTP(AuthorizeOTPRequestDTO request) {
         TemplateService<AuthorizeOTPRequestDTO, BaseResponseDTO<Object>> restTemplate = new TemplateService<AuthorizeOTPRequestDTO, BaseResponseDTO<Object>>(this.restTemplate);
-        return restTemplate.request(HttpMethodEnum.POST, this.baseUri + "invoke-otp", request);
+        return restTemplate.request(
+            HttpMethodEnum.POST, 
+            this.baseUri + "invoke-otp", 
+            request,
+            new ParameterizedTypeReference<BaseResponseDTO<Object>>() {}
+        );
     }
 
 }
