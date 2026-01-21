@@ -6,7 +6,7 @@ using Confluent.Kafka;
 
 namespace AuthService.Messaging.Producer;
 
-public sealed class AuthenticationSMTPMessageProducer
+public class AuthenticationSMTPMessageProducer : IAuthenticationSMTPMessageProducer
 {
     public const string TOPIC = "nma-service-01-authotp";
 

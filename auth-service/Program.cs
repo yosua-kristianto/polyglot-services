@@ -88,7 +88,7 @@ public class Program
         builder.Services.AddScoped<IOtpRepository, OtpRepository>();
         builder.Services.AddScoped<ITokenCacheRepository, TokenCacheRepository>();
 
-        builder.Services.AddScoped<AuthenticationSMTPMessageProducer>();
+        builder.Services.AddScoped<IAuthenticationSMTPMessageProducer>();
     }
 
     public static void Main(string[] args)

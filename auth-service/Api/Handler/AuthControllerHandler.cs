@@ -16,9 +16,9 @@ public class AuthControllerHandler : IAuthControllerHandler
     private readonly IOtpRepository _otpRepository;
     private readonly ITokenCacheRepository _tokenCacheRepository;
 
-    private readonly AuthenticationSMTPMessageProducer _authOtpProducer;
+    private readonly IAuthenticationSMTPMessageProducer _authOtpProducer;
 
-    public AuthControllerHandler(IUMARepository umaRepository, IOtpRepository otpRepository, ITokenCacheRepository tokenCacheRepository, AuthenticationSMTPMessageProducer authOtp)
+    public AuthControllerHandler(IUMARepository umaRepository, IOtpRepository otpRepository, ITokenCacheRepository tokenCacheRepository, IAuthenticationSMTPMessageProducer authOtp)
     {
         this._umaRepository = umaRepository;
         this._otpRepository = otpRepository;
