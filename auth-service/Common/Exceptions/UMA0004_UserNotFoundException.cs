@@ -2,8 +2,10 @@ using System;
 
 namespace AuthService.Common.Exceptions;
 
-public class UserNotFoundException(): Exception(message: ErrorMessage)
+public class UserNotFoundException(): BaseCustomException(message: ErrorMessage)
 {
-    public const string Code = "UMA0004";
     private const string ErrorMessage = "User not found.";
+
+    public override string Code => "UMA0004";
+    public override int StatusCode => StatusCodes.Status422UnprocessableEntity;
 }

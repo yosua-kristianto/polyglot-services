@@ -174,4 +174,12 @@ public class AuthControllerHandler : IAuthControllerHandler
 
         return this.Login(email, otp, "");
     }
+
+    public User Me(string accessToken)
+    {
+        TokenCache? token = this._tokenCacheRepository.GetTokenByIdAsync(Guid.Parse(accessToken)).GetAwaiter().GetResult() ?? throw new UnauthorizedException();
+        User? user = this._umaRepository.FindUserById(token.UserId) ?? throw new UnauthorizedException();
+
+        return user;
+    }
 }

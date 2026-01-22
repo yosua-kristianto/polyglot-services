@@ -1,4 +1,5 @@
 using AuthService.model.Object.Response;
+using AuthService.Model.Entity;
 
 namespace AuthService.Api.Handler;
 
@@ -60,4 +61,11 @@ public interface IAuthControllerHandler
     /// </summary>
     /// <param name="email"></param>
     public LoginResponseDTO RefreshOTP(string email);
+
+    /// <summary>
+    /// Get user information based on the provided access token.
+    /// </summary>
+    /// <param name="accessToken"></param>
+    /// <returns></returns>
+    public User Me(string accessToken);
 }
