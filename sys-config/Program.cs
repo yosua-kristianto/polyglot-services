@@ -34,6 +34,8 @@ class Program
         }
     }
 
+    #region env
+
     /// <summary>
     /// This function is boilerplate of this project. Used for determine which environment 
     /// variable used during run time.
@@ -50,7 +52,7 @@ class Program
             ConsoleHelper.WriteLineError(exceptionString);
             throw new Exception(exceptionString);
         }
-
+       
         // Builder
         IHost host = Host.CreateDefaultBuilder()
             .ConfigureAppConfiguration((hostCtx, config) =>
@@ -78,6 +80,13 @@ class Program
                         config.GetConnectionString("NMAConnection")
                     );
                 });
+
+                services.AddDbContext<SystemDbCMAContext>(options =>
+                {
+                    options.UseNpgsql(
+                        config.GetConnectionString("CMAConnection")
+                    );
+                });
             })
             .Build();
 
@@ -85,6 +94,10 @@ class Program
 
         return host;
     }
+
+    #endregion
+
+    #region database stuffs
 
     /// <summary>
     /// This function handle Database Migration. 
@@ -103,6 +116,11 @@ class Program
         var dbNma = scope.ServiceProvider.GetRequiredService<SystemDbNMAContext>();
         dbNma.Database.Migrate();
         Console.WriteLine("Database NMA migration completed.");
+
+        // Migrate CMA Database.
+        var dbCma = scope.ServiceProvider.GetRequiredService<SystemDbCMAContext>();
+        dbCma.Database.Migrate();
+        Console.WriteLine("Database CMA migration completed.");
     }
 
     /// <summary>
@@ -127,6 +145,8 @@ class Program
             // Seed Users for each Role except Sysadmin
         }
     }
+
+    #endregion
 
     static void Main(string[] args)
     {

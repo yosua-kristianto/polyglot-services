@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "sys-config": {
+      "commandName": "Project",
+      "commandLineArgs": "--migrate"
+    }
+  }
+}
