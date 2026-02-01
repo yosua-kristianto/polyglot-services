@@ -91,6 +91,7 @@ public class TemplateService<T, S> {
 
     private org.springframework.http.HttpMethod resolveMethod(HttpMethodEnum method) {
         return switch (method) {
+            case GET -> org.springframework.http.HttpMethod.GET;
             case POST -> org.springframework.http.HttpMethod.POST;
             case PUT -> org.springframework.http.HttpMethod.PUT;
             case PATCH -> org.springframework.http.HttpMethod.PATCH;
