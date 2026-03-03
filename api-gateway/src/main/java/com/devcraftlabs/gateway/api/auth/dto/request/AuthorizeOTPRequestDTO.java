@@ -1,4 +1,4 @@
-package com.devcraftlabs.gateway.models.dto.request.auth;
+package com.devcraftlabs.gateway.api.auth.dto.request;
 
 import lombok.Data;
 

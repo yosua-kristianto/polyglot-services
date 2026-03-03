@@ -1,8 +1,5 @@
-using System;
 using System.Text.Json;
 using AuthService.Config.Kafka;
-using AuthService.Model.Object.Messaging.Producer;
-using Confluent.Kafka;
 
 namespace AuthService.Messaging.Producer;
 

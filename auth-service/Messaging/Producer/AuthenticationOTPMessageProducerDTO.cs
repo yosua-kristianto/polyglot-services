@@ -1,19 +1,19 @@
 using System.Text.Json.Serialization;
 
-namespace AuthService.Model.Object.Messaging.Producer;
+namespace AuthService.Messaging.Producer;
 
 public class AuthenticationOTPMessageProducerDTO
 {
     [JsonPropertyName("user_id")]
-    public Guid UserId { get; set; }
+    public required Guid UserId { get; set; }
 
     [JsonPropertyName("recipient_name")]
-    public string RecipientName {get;set;}
+    public required string RecipientName {get;set;}
 
     [JsonPropertyName("otp")]
-    public string Otp { get; set; }
+    public required string Otp { get; set; }
 
     [JsonPropertyName("email")]
-    public string Email { get; set; }
+    public required string Email { get; set; }
 
 }

@@ -1,7 +1,7 @@
-using AuthService.model.Object.Response;
+using AuthService.Api.Auth.Dto.Response;
 using AuthService.Model.Entity;
 
-namespace AuthService.Api.Handler;
+namespace AuthService.Api.Auth;
 
 
 public interface IAuthControllerHandler

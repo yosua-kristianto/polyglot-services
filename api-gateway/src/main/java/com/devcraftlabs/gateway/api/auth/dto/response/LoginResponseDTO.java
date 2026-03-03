@@ -1,4 +1,4 @@
-package com.devcraftlabs.gateway.models.dto.response.auth;
+package com.devcraftlabs.gateway.api.auth.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

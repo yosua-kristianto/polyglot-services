@@ -1,4 +1,4 @@
-namespace Model.Object;
+namespace AuthService.Common;
 
 public class BaseResponseDTO<T>
 {

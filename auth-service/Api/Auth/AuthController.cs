@@ -1,12 +1,10 @@
-using AuthService.Api.Handler;
-using AuthService.model.Object.Request;
-using AuthService.model.Object.Response;
+using AuthService.Api.Auth.Dto.Request;
+using AuthService.Api.Auth.Dto.Response;
 using AuthService.Model.Entity;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Model.Object;
+using AuthService.Common;
 
-namespace AuthService.Api.Controller;
+namespace AuthService.Api.Auth;
 
 [Route("api/v1/auth")]
 [ApiController]

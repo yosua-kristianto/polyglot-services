@@ -10,9 +10,9 @@ public interface IRedisConnection
 
 public class RedisOptions
 {
-    public string Host {get;set;}
+    public required string Host {get;set;}
     public int Port {get;set;}
-    public string Password {get;set;}
+    public required string Password {get;set;}
 }
 
 public class SystemCacheUMAContext : IRedisConnection

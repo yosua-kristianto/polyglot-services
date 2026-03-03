@@ -1,4 +1,4 @@
-package com.devcraftlabs.gateway.models.dto;
+package com.devcraftlabs.gateway.common;
 
 import lombok.Data;
 

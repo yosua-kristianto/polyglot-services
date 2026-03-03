@@ -1,6 +1,4 @@
-﻿using AuthService.Model.Object.Messaging.Producer;
-
-namespace AuthService.Messaging.Producer
+﻿namespace AuthService.Messaging.Producer
 {
     public interface IAuthenticationSMTPMessageProducer
     {

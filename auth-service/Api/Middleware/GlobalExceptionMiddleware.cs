@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using AuthService.Common.Exceptions;
-using Model.Object;
+using AuthService.Common;
 
 public class GlobalExceptionMiddleware
 {

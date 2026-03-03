@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devcraftlabs.gateway.models.dto.BaseResponseDTO;
-import com.devcraftlabs.gateway.models.dto.request.auth.AuthorizeOTPRequestDTO;
-import com.devcraftlabs.gateway.models.dto.request.auth.LoginRequestDTO;
-import com.devcraftlabs.gateway.models.dto.request.auth.RegisterRequestDTO;
-import com.devcraftlabs.gateway.models.dto.response.auth.LoginResponseDTO;
+import com.devcraftlabs.gateway.api.auth.dto.request.AuthorizeOTPRequestDTO;
+import com.devcraftlabs.gateway.api.auth.dto.request.LoginRequestDTO;
+import com.devcraftlabs.gateway.api.auth.dto.request.RegisterRequestDTO;
+import com.devcraftlabs.gateway.api.auth.dto.response.LoginResponseDTO;
+import com.devcraftlabs.gateway.common.BaseResponseDTO;
 
 @RestController
 @RequestMapping(value = "/api/v1/auth")

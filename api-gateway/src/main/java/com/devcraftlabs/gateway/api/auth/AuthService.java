@@ -5,13 +5,13 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.devcraftlabs.gateway.api.auth.dto.request.AuthorizeOTPRequestDTO;
+import com.devcraftlabs.gateway.api.auth.dto.request.LoginRequestDTO;
+import com.devcraftlabs.gateway.api.auth.dto.request.RegisterRequestDTO;
+import com.devcraftlabs.gateway.api.auth.dto.response.LoginResponseDTO;
+import com.devcraftlabs.gateway.common.BaseResponseDTO;
 import com.devcraftlabs.gateway.common.HttpMethodEnum;
 import com.devcraftlabs.gateway.common.TemplateService;
-import com.devcraftlabs.gateway.models.dto.BaseResponseDTO;
-import com.devcraftlabs.gateway.models.dto.request.auth.AuthorizeOTPRequestDTO;
-import com.devcraftlabs.gateway.models.dto.request.auth.LoginRequestDTO;
-import com.devcraftlabs.gateway.models.dto.request.auth.RegisterRequestDTO;
-import com.devcraftlabs.gateway.models.dto.response.auth.LoginResponseDTO;
 
 @Service
 public class AuthService implements IAuthService {
