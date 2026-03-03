@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 import com.devcraftlabs.integration.model.object.SmtpMessageRequestDTO;
 import com.devcraftlabs.integration.services.smtp.SMTPService;
-import com.devcraftlabs.integration.services.telegram.TelegramService;
 
 import jakarta.mail.MessagingException;
 
