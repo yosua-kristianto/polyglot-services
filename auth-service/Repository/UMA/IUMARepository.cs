@@ -1,7 +1,7 @@
 using System;
 using AuthService.Model.Entity;
 
-namespace auth_service.Repository.UMA;
+namespace AuthService.Repository.UMA;
 
 public interface IUMARepository
 {

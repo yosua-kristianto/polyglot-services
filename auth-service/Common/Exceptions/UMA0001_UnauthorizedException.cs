@@ -2,8 +2,10 @@ using System;
 
 namespace AuthService.Common.Exceptions;
 
-public class UnauthorizedException() : Exception(message: ErrorMessage)
+public class UnauthorizedException() : BaseCustomException(message: ErrorMessage)
 {
-    public const string Code = "UMA0001";
     private const string ErrorMessage = "Unauthorized.";
+
+    public override string Code => "UMA0001";
+    public override int StatusCode => StatusCodes.Status401Unauthorized;
 }

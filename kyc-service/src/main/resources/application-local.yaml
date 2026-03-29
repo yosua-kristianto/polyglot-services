@@ -1,0 +1,13 @@
+server:
+  port: 57900
+spring:
+  application:
+    name: KYC Service
+  datasource:
+      url: jdbc:postgresql://localhost:5432/polyglot_cma
+      username: postgres
+      password: root
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true

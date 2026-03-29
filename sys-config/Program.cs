@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SystemConfigurator.Config.Database.Seeder.NMA;
 using SystemConfigurator.Config;
 using SystemConfigurator.Config.Database;
 using SystemConfigurator.Config.Database.Seeder.UMA;
@@ -33,6 +34,8 @@ class Program
         }
     }
 
+    #region env
+
     /// <summary>
     /// This function is boilerplate of this project. Used for determine which environment 
     /// variable used during run time.
@@ -49,7 +52,7 @@ class Program
             ConsoleHelper.WriteLineError(exceptionString);
             throw new Exception(exceptionString);
         }
-
+       
         // Builder
         IHost host = Host.CreateDefaultBuilder()
             .ConfigureAppConfiguration((hostCtx, config) =>
@@ -70,6 +73,20 @@ class Program
                         config.GetConnectionString("UMAConnection")
                     );
                 });
+
+                services.AddDbContext<SystemDbNMAContext>(options =>
+                {
+                    options.UseNpgsql(
+                        config.GetConnectionString("NMAConnection")
+                    );
+                });
+
+                services.AddDbContext<SystemDbCMAContext>(options =>
+                {
+                    options.UseNpgsql(
+                        config.GetConnectionString("CMAConnection")
+                    );
+                });
             })
             .Build();
 
@@ -78,18 +95,32 @@ class Program
         return host;
     }
 
+    #endregion
+
+    #region database stuffs
+
     /// <summary>
     /// This function handle Database Migration. 
     /// </summary>
     /// <param name="host"></param>
     static void DatabaseMigrationRunner(IHost host)
     {
-        using (IServiceScope scope = host.Services.CreateScope())
-        {
-            // Migrate UMA Database.
-            var db = scope.ServiceProvider.GetRequiredService<SystemDbUMAContext>();
-            db.Database.Migrate();
-        }
+        Console.WriteLine("Starting database migration...");
+        using IServiceScope scope = host.Services.CreateScope();
+        // Migrate UMA Database.
+        var db = scope.ServiceProvider.GetRequiredService<SystemDbUMAContext>();
+        db.Database.Migrate();
+        Console.WriteLine("Database UMA migration completed.");
+
+        // Migrate NMA Database.
+        var dbNma = scope.ServiceProvider.GetRequiredService<SystemDbNMAContext>();
+        dbNma.Database.Migrate();
+        Console.WriteLine("Database NMA migration completed.");
+
+        // Migrate CMA Database.
+        var dbCma = scope.ServiceProvider.GetRequiredService<SystemDbCMAContext>();
+        dbCma.Database.Migrate();
+        Console.WriteLine("Database CMA migration completed.");
     }
 
     /// <summary>
@@ -101,19 +132,21 @@ class Program
     /// <param name="env"></param>
     static void DatabaseSeederController(IHost host, string env)
     {
-        using (IServiceScope scope = host.Services.CreateScope())
-        {
-            // Seed Mandatory
-            var db = scope.ServiceProvider.GetRequiredService<SystemDbUMAContext>();
-            new MandatorySeeder(db).Seed().GetAwaiter();
+        using IServiceScope scope = host.Services.CreateScope();
 
-            if(env != "prod")
-            {
-                // Seed Users for each Role except Sysadmin
-            }
-            
+        // Seed Mandatory
+        var db = scope.ServiceProvider.GetRequiredService<SystemDbUMAContext>();
+        var dbNma = scope.ServiceProvider.GetRequiredService<SystemDbNMAContext>();
+        new MandatorySeeder(db).Seed().GetAwaiter();
+        new PersonalNotificationSeeder(dbNma).Seed().GetAwaiter();
+
+        if (env != "prod")
+        {
+            // Seed Users for each Role except Sysadmin
         }
     }
+
+    #endregion
 
     static void Main(string[] args)
     {

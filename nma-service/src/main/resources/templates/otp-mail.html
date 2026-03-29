@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <table width="100%" cellpadding="0" cellspacing="0">
+        <tr rowspan="3">
+            <td align="center">
+                <h1>Polyglot Service</h1>
+            </td>
+        </tr>
+        <tr>
+            <br />            
+        </tr>
+        <tr>
+            <br />            
+        </tr>
+        <tr>
+            <td>
+                Hi <span th:text="${recipient}"></span>, you received this email because a login attempt to your account was established at:
+                <br />
+                <span th:text="${fullTimestamp}">Tuesday, 18th December 2025 13:45 UTC+7</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h2>OTP: <span th:text="${otp}">12345678</span></h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b text="red">Please do not share the OTP to anyone, including the authorized person from Polyglot Service.</b>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                If this is not requested by you, please report it through feedback system.
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                Polyglot Service 2025 all right reserved.
+            </td>
+        </tr>
+    </table>
+
+    <hr />
+    <small>Sent from SMTP Service</small>
+</body>
+</html>

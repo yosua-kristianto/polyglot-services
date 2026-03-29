@@ -1,9 +1,11 @@
 using System;
 
-namespace auth_service.Common.Exceptions;
+namespace AuthService.Common.Exceptions;
 
-public class OTPExpiredException(): Exception(message: ErrorMessage)
+public class OTPExpiredException(): BaseCustomException(message: ErrorMessage)
 {
-    public const string Code = "UMA0003";
     private const string ErrorMessage = "OTP has expired.";
+
+    public override string Code => "UMA0003";
+    public override int StatusCode => StatusCodes.Status419AuthenticationTimeout;
 }

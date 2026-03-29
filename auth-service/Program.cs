@@ -1,14 +1,17 @@
 using System.Reflection;
 using System.Text.Json;
-using auth_service.Api.Handler;
-using auth_service.Repository.Memcache.Otp;
-using auth_service.Repository.Memcache.Token;
-using auth_service.Repository.UMA;
+using AuthService.Api.Handler;
+using AuthService.Config.Kafka;
+using AuthService.Messaging.Producer;
+using AuthService.Repository.Memcache.Otp;
+using AuthService.Repository.Memcache.Token;
+using AuthService.Repository.UMA;
 using AuthService.Api.Handler;
 using AuthService.Config;
 using AuthService.Config.Database;
 using AuthService.Config.Memcache;
 using AuthService.Repository.Memcache.Token;
+using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 namespace AuthService;
 
@@ -22,7 +25,7 @@ public class Program
     {
         // Read the file as embedded resources
         var assembly = Assembly.GetExecutingAssembly();
-        string resourceName = "AuthService.banner.txt";
+        string resourceName = "AuthService.AuthService.banner.txt";
         using Stream stream = assembly.GetManifestResourceStream(resourceName);
         if(stream == null)
         {
@@ -73,6 +76,8 @@ public class Program
             builder.Configuration.GetSection("Redis")
         );
         builder.Services.AddSingleton<IRedisConnection, SystemCacheUMAContext>();
+
+        builder.Services.AddSingleton<KafkaContext>();
     }
 
     public static void RegisterDI(WebApplicationBuilder builder)
@@ -82,6 +87,8 @@ public class Program
         builder.Services.AddScoped<IUMARepository, UMARepository>();
         builder.Services.AddScoped<IOtpRepository, OtpRepository>();
         builder.Services.AddScoped<ITokenCacheRepository, TokenCacheRepository>();
+
+        builder.Services.AddScoped<IAuthenticationSMTPMessageProducer>();
     }
 
     public static void Main(string[] args)
@@ -130,7 +137,7 @@ public class Program
             app.MapOpenApi();
         }
 
-        app.UseHttpsRedirection();
+        // app.UseHttpsRedirection();
         app.MapControllers();
 
         app.Run();

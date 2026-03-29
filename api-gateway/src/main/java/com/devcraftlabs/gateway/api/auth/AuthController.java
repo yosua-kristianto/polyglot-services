@@ -1,0 +1,43 @@
+package com.devcraftlabs.gateway.api.auth;
+
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.devcraftlabs.gateway.api.auth.dto.request.AuthorizeOTPRequestDTO;
+import com.devcraftlabs.gateway.api.auth.dto.request.LoginRequestDTO;
+import com.devcraftlabs.gateway.api.auth.dto.request.RegisterRequestDTO;
+import com.devcraftlabs.gateway.api.auth.dto.response.LoginResponseDTO;
+import com.devcraftlabs.gateway.common.BaseResponseDTO;
+
+@RestController
+@RequestMapping(value = "/api/v1/auth")
+public class AuthController {
+    
+    private final IAuthService authService;
+
+    public AuthController(IAuthService authService) {
+        this.authService = authService;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "login")
+    public BaseResponseDTO<LoginResponseDTO> login(@RequestBody LoginRequestDTO request) {
+        return authService.login(request);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "register")
+    public BaseResponseDTO<Object> register(@RequestBody RegisterRequestDTO request){
+        return authService.register(request);
+    }
+
+    @RequestMapping(method=RequestMethod.POST, value = "verify-email")
+    public BaseResponseDTO<LoginResponseDTO> requestMethodName(@RequestBody LoginRequestDTO request) {
+        return authService.verifyEmailRegistration(request);
+    }
+    
+    @RequestMapping(method=RequestMethod.POST, value = "invoke-otp")
+    public BaseResponseDTO<Object> invokeOTP(@RequestBody AuthorizeOTPRequestDTO request) {
+        return authService.invokeOTP(request);
+    }
+}

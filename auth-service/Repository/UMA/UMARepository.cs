@@ -3,7 +3,7 @@ using AuthService.Config.Database;
 using AuthService.Model.Entity;
 using AuthService.Repository.UMA;
 
-namespace auth_service.Repository.UMA;
+namespace AuthService.Repository.UMA;
 
 public class UMARepository(SystemDbUMAContext ctx) : BaseRepository(ctx), IUMARepository
 {

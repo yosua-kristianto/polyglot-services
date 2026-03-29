@@ -1,9 +1,11 @@
 using System;
 
-namespace auth_service.Common.Exceptions;
+namespace AuthService.Common.Exceptions;
 
-public class InvalidAccessToken(): Exception(message: ErrorMessage)
+public class InvalidAccessToken(): BaseCustomException(message: ErrorMessage)
 {
-    public const string Code = "UMA0002";
     private const string ErrorMessage = "Invalid access token.";
+
+    public override string Code => "UMA0002";
+    public override int StatusCode => StatusCodes.Status401Unauthorized;
 }
