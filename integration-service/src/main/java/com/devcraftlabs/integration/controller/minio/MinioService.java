@@ -15,13 +15,16 @@ import io.minio.RemoveObjectArgs;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 public class MinioService {
 
     private final MinioClient client;
 
-    @Value("${minio.default-bucket}")
     private final String defaultBucket;
+
+    public MinioService(MinioClient client, @Value("${minio.bucket}") String defaultBucket) {
+        this.client = client;
+        this.defaultBucket = defaultBucket;
+    }
 
     /**
      * 
@@ -29,7 +32,7 @@ public class MinioService {
      * @param bucket
      * @throws Exception
      */
-    public void uploadFile(MultipartFile file, String bucket) throws Exception {
+    public void uploadFile(MultipartFile file, String bucket, String objectName) throws Exception {
 
         // Ensure bucket exists
         boolean found = this.client.bucketExists(
@@ -43,7 +46,7 @@ public class MinioService {
         this.client.putObject(
                 PutObjectArgs.builder()
                         .bucket(bucket)
-                        .object(file.getOriginalFilename())
+                        .object(objectName)
                         .stream(file.getInputStream(), file.getSize(), -1)
                         .contentType(file.getContentType())
                         .build()
@@ -56,8 +59,8 @@ public class MinioService {
      * @param file
      * @throws Exception
      */
-    public void uploadFile(MultipartFile file) throws Exception {
-        this.uploadFile(file, this.defaultBucket);
+    public void uploadFile(MultipartFile file, String objectName) throws Exception {
+        this.uploadFile(file, this.defaultBucket, objectName);
     }
 
 
