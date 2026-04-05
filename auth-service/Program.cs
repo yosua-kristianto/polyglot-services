@@ -1,18 +1,16 @@
 using System.Reflection;
 using System.Text.Json;
-using AuthService.Api.Handler;
+using AuthService.Api.Auth;
 using AuthService.Config.Kafka;
 using AuthService.Messaging.Producer;
 using AuthService.Repository.Memcache.Otp;
 using AuthService.Repository.Memcache.Token;
 using AuthService.Repository.UMA;
-using AuthService.Api.Handler;
 using AuthService.Config;
 using AuthService.Config.Database;
 using AuthService.Config.Memcache;
-using AuthService.Repository.Memcache.Token;
-using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
+using AuthService.Api.Middleware;
 namespace AuthService;
 
 public class Program
@@ -76,7 +74,6 @@ public class Program
             builder.Configuration.GetSection("Redis")
         );
         builder.Services.AddSingleton<IRedisConnection, SystemCacheUMAContext>();
-
         builder.Services.AddSingleton<KafkaContext>();
     }
 
@@ -88,7 +85,9 @@ public class Program
         builder.Services.AddScoped<IOtpRepository, OtpRepository>();
         builder.Services.AddScoped<ITokenCacheRepository, TokenCacheRepository>();
 
-        builder.Services.AddScoped<IAuthenticationSMTPMessageProducer>();
+        // Add Dependency Injection for Kafka Here
+
+        builder.Services.AddScoped<IAuthenticationSMTPMessageProducer, AuthenticationSMTPMessageProducer>();
     }
 
     public static void Main(string[] args)
@@ -130,6 +129,9 @@ public class Program
         builder.Services.AddOpenApi();
 
         var app = builder.Build();
+
+        // Configure Interceptor
+        app.UseMiddleware<GlobalExceptionMiddleware>();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
