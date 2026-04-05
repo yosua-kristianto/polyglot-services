@@ -15,7 +15,16 @@ public class TokenCacheRepository(IRedisConnection ctx) : BaseMemcacheRepository
     {
         string key = $"{TokenCache.TableName}:{token.TokenId}";
         string data = JsonSerializer.Serialize(token);
-        await this._redisConnection.StringSetAsync(key, data);
+
+        DateTime expiredAt = DateTime.Now.AddMilliseconds(
+            token.ExpiredAt - DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
+        );
+
+        await this._redisConnection.StringSetAsync(
+            key, 
+            data,
+            (new Expiration(expiredAt))
+        );
     }
 
     public async Task<int> DeleteExpiredTokensAsync()

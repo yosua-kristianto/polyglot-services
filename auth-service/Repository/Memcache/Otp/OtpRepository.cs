@@ -14,7 +14,15 @@ public class OtpRepository(IRedisConnection ctx) : BaseMemcacheRepository(ctx), 
         string key = $"{OtpCache.TableName}:{otpInstance.UserId}";
         string data = JsonSerializer.Serialize(otpInstance);
 
-        await this._redisConnection.StringSetAsync(key, data);
+        DateTime expiredAt = DateTime.Now.AddMilliseconds(
+            otpInstance.ExpiredAt - DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
+        );
+
+        await this._redisConnection.StringSetAsync(
+            key,
+            data,
+            (new Expiration(expiredAt))
+        );
     }
 
     public async Task DistinguishOtpByUserId(Guid userId)
