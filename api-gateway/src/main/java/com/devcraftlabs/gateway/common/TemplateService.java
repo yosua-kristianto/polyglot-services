@@ -20,7 +20,7 @@ public class TemplateService<T, S> {
     /**
      * 1. Core request implementation using WebClient
      */
-    private <S> S request(
+    public <S> S request(
             HttpMethodEnum method,
             String uri,
             T request,
@@ -31,6 +31,9 @@ public class TemplateService<T, S> {
         HttpHeaders httpHeaders = buildHeaders(header);
 
         try {
+            if(request == null){
+                httpHeaders.setContentLength(0);
+            }
 
             HttpEntity<T> httpEntity = new HttpEntity<>(request, httpHeaders);
 
