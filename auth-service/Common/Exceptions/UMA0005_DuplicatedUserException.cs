@@ -7,5 +7,5 @@ public class DuplicatedUserException(): BaseCustomException(message: ErrorMessag
     private const string ErrorMessage = "Attempt to create a user that already exists. Please choose another email.";
 
     public override string Code => "UMA0005";
-    public override int StatusCode => StatusCodes.Status422UnprocessableEntity;
+    public override int StatusCode => StatusCodes.Status200OK;
 }

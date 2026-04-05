@@ -6,6 +6,6 @@ public class UserNotActivatedException() : BaseCustomException(message: ErrorMes
 {
     public override string Code => "UMA0006";
 
-    public override int StatusCode => StatusCodes.Status422UnprocessableEntity;
+    public override int StatusCode => StatusCodes.Status200OK;
     private const string ErrorMessage = "The user account is not activated. Please activate your account before logging in.";
 }
