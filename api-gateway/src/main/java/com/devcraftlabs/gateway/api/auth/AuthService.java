@@ -2,6 +2,8 @@ package com.devcraftlabs.gateway.api.auth;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -9,6 +11,7 @@ import com.devcraftlabs.gateway.api.auth.dto.request.AuthorizeOTPRequestDTO;
 import com.devcraftlabs.gateway.api.auth.dto.request.LoginRequestDTO;
 import com.devcraftlabs.gateway.api.auth.dto.request.RegisterRequestDTO;
 import com.devcraftlabs.gateway.api.auth.dto.response.LoginResponseDTO;
+import com.devcraftlabs.gateway.api.auth.dto.response.MeResponseDTO;
 import com.devcraftlabs.gateway.common.BaseResponseDTO;
 import com.devcraftlabs.gateway.common.HttpMethodEnum;
 import com.devcraftlabs.gateway.common.TemplateService;
@@ -75,4 +78,15 @@ public class AuthService implements IAuthService {
         );
     }
 
+    @Override
+    public BaseResponseDTO<MeResponseDTO> me(HttpHeaders headers) {
+        TemplateService<HttpEntity<Void>, BaseResponseDTO<MeResponseDTO>> restTemplate = new TemplateService<HttpEntity<Void>, BaseResponseDTO<MeResponseDTO>>(this.restTemplate);
+        return restTemplate.request(
+            HttpMethodEnum.POST,
+            this.baseUri + "me",
+            null,
+            headers,
+            new ParameterizedTypeReference<BaseResponseDTO<MeResponseDTO>>() {}
+        );
+    }
 }

@@ -1,6 +1,8 @@
 package com.devcraftlabs.gateway.api.auth;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,6 +11,7 @@ import com.devcraftlabs.gateway.api.auth.dto.request.AuthorizeOTPRequestDTO;
 import com.devcraftlabs.gateway.api.auth.dto.request.LoginRequestDTO;
 import com.devcraftlabs.gateway.api.auth.dto.request.RegisterRequestDTO;
 import com.devcraftlabs.gateway.api.auth.dto.response.LoginResponseDTO;
+import com.devcraftlabs.gateway.api.auth.dto.response.MeResponseDTO;
 import com.devcraftlabs.gateway.common.BaseResponseDTO;
 
 @RestController
@@ -39,5 +42,10 @@ public class AuthController {
     @RequestMapping(method=RequestMethod.POST, value = "invoke-otp")
     public BaseResponseDTO<Object> invokeOTP(@RequestBody AuthorizeOTPRequestDTO request) {
         return authService.invokeOTP(request);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "me")
+    public BaseResponseDTO<MeResponseDTO> me(@RequestHeader HttpHeaders headers) {
+        return authService.me(headers);
     }
 }

@@ -1,9 +1,12 @@
 package com.devcraftlabs.gateway.api.auth;
 
+import org.springframework.http.HttpHeaders;
+
 import com.devcraftlabs.gateway.api.auth.dto.request.AuthorizeOTPRequestDTO;
 import com.devcraftlabs.gateway.api.auth.dto.request.LoginRequestDTO;
 import com.devcraftlabs.gateway.api.auth.dto.request.RegisterRequestDTO;
 import com.devcraftlabs.gateway.api.auth.dto.response.LoginResponseDTO;
+import com.devcraftlabs.gateway.api.auth.dto.response.MeResponseDTO;
 import com.devcraftlabs.gateway.common.BaseResponseDTO;
 
 public interface IAuthService {
@@ -44,4 +47,13 @@ public interface IAuthService {
      */
     public BaseResponseDTO<Object> invokeOTP(AuthorizeOTPRequestDTO request);
 
+    /**
+     * me
+     * 
+     * This function act as gateway to GET /api/v1/auth/me
+     * 
+     * @param headers
+     * @return
+     */
+    public BaseResponseDTO<MeResponseDTO> me(HttpHeaders headers);
 }
