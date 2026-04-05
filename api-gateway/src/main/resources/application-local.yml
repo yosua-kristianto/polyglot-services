@@ -1,0 +1,13 @@
+server:
+  port: 55000
+spring:
+  application:
+    name: api-gateway
+service:
+    uri:
+        auth_service: http://localhost:57000/api
+secret: cCrHiZPmoVTgopsueVEvmRankOtoGwVl
+gateway:
+  uri:
+    auth-service: http://localhost:57000/api
+    wallet-service: http://localhost:8082/api
