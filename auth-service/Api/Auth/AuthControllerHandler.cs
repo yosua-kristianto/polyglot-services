@@ -100,7 +100,9 @@ public class AuthControllerHandler : IAuthControllerHandler
             TokenId = Guid.NewGuid(),
             RefreshId = Guid.NewGuid(),
             UserId = existingUser.Id,
-            CreatedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
+            Identity = existingUser,
+            CreatedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+            ExpiredAt = DateTimeOffset.UtcNow.AddMinutes(TokenCache.TOKEN_EXPIRITY_IN_MINUTES).ToUnixTimeMilliseconds()
         };
 
         this._tokenCacheRepository.CreateToken(token).GetAwaiter().GetResult();
@@ -176,9 +178,9 @@ public class AuthControllerHandler : IAuthControllerHandler
 
     public User Me(string accessToken)
     {
+        accessToken = accessToken.Replace("Bearer ", "");
         TokenCache? token = this._tokenCacheRepository.GetTokenByIdAsync(Guid.Parse(accessToken)).GetAwaiter().GetResult() ?? throw new UnauthorizedException();
-        User? user = this._umaRepository.FindUserById(token.UserId) ?? throw new UnauthorizedException();
 
-        return user;
+        return token.Identity;
     }
 }
