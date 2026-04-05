@@ -17,8 +17,10 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class XTokenValidator implements Filter {
     private HmacUtilities hmacUtilities;
